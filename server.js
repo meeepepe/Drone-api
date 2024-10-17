@@ -3,8 +3,7 @@ const app = express();
 const PORT = 3000;
 
 const customers = [
-  { id: 1234, name: "Steven Adams", birthdate: "1980-01-02" },
-  { id: 5678, name: "James Lukather", birthdate: "1980-01-02" },
+  { id: 65010468, name: "Thanyatorn", birthdate: "2003-02-19" },
 ];
 
 app.use(express.json());
