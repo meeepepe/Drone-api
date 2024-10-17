@@ -73,10 +73,10 @@ app.get("/configs/:id", async (req, res) => {
 
 
 
-// GET /status/:id to fetch drone status by id
+// GET /status/:id to fetch drone condition (status) by id
 app.get("/status/:id", async (req, res) => {
   const id = req.params.id;
-  console.log(`Fetching status for drone ID: ${id}`); // Log the requested ID
+  console.log(`Fetching condition for drone ID: ${id}`); // Log the requested ID
   try {
       const rawData = await fetch(url, { method: "GET" });
       if (!rawData.ok) {
@@ -94,12 +94,18 @@ app.get("/status/:id", async (req, res) => {
           return res.status(404).send({ message: "Drone not found" });
       }
 
-      // Assuming 'status' is part of the drone data
-      const droneStatus = myDrone.status || "Unknown"; // Default to 'Unknown' if status is not available
+      // Assuming the condition is based on battery, operational status, etc.
+      const droneCondition = {
+          drone_id: id,
+          battery_level: myDrone.battery_level || "Unknown",
+          operational_status: myDrone.operational_status || "Unknown",
+          last_maintenance: myDrone.last_maintenance || "Unknown",
+          overall_condition: myDrone.overall_condition || "Good",  // Default to 'Good'
+      };
 
-      res.send({ drone_id: id, status: droneStatus });
+      res.send(droneCondition);
   } catch (error) {
-      console.error("Error fetching drone status:", error);
+      console.error("Error fetching drone condition:", error);
       res.status(500).send({ message: "Internal Server Error" });
   }
 });
