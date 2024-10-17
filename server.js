@@ -73,6 +73,36 @@ app.get("/configs/:id", async (req, res) => {
 
 
 
+// GET /status/:id to fetch drone status by id
+app.get("/status/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(`Fetching status for drone ID: ${id}`); // Log the requested ID
+  try {
+      const rawData = await fetch(url, { method: "GET" });
+      if (!rawData.ok) {
+          console.error(`Error fetching data from external API: ${rawData.status} ${rawData.statusText}`);
+          return res.status(500).send({ message: "Error fetching data from external API" });
+      }
+
+      const jsonData = await rawData.json();
+      console.log("Fetched data:", jsonData); // Log the fetched data
+
+      const drones = jsonData.data || [];
+      const myDrone = drones.find((item) => item.drone_id == id);
+
+      if (!myDrone) {
+          return res.status(404).send({ message: "Drone not found" });
+      }
+
+      // Assuming 'status' is part of the drone data
+      const droneStatus = myDrone.status || "Unknown"; // Default to 'Unknown' if status is not available
+
+      res.send({ drone_id: id, status: droneStatus });
+  } catch (error) {
+      console.error("Error fetching drone status:", error);
+      res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 
 
 
