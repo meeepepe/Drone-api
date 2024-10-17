@@ -74,7 +74,7 @@ app.get("/status/:id", async (req, res) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello API World!");
+  res.send("Server API Assignment 1");
 });
 
 app.get("/customers", (req, res) => {
